@@ -44,7 +44,7 @@ public class AccountService implements UserDetailsService {
         Account account = Account.builder()
                 .email(signupForm.getEmail())
                 .nickname(signupForm.getNickname())
-                .password(passwordEncoder.encode(signupForm.getPassword())) // TODO encoding 반드시 해야함
+                .password(passwordEncoder.encode(signupForm.getPassword()))
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
                 .studyUpdatedByWeb(true)
@@ -83,5 +83,11 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    @Transactional
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }
