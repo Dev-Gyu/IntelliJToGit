@@ -5,6 +5,7 @@ import com.studyolle.studyolle.mail.ConsoleMailSender;
 import com.studyolle.studyolle.account.AccountRepository;
 import com.studyolle.studyolle.account.SignupForm;
 import com.studyolle.studyolle.domain.Account;
+import com.studyolle.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -89,5 +90,15 @@ public class AccountService implements UserDetailsService {
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
+    }
+
+    @Transactional
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        account.setBio(profile.getBio());
+        account.setProfileImage(profile.getProfileImage());
+        accountRepository.save(account);
     }
 }
