@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments.html :: settings-menu (currentMenu='account')"></div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2 class="col-12">닉네임 변경</h2>
+            </div>
+            <div class="row">
+                <form class="col-12" action="#"
+                      th:action="@{/settings/account}" th:object="${nicknameDto}" method="post" novalidate>
+
+                    <div class="form-group">
+                        <div class="alert alert-warning" role="alert">
+                            닉네임을 변경하면 프로필 페이지 링크도 바뀝니다!
+                        </div>
+                        <div th:if="${message}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                            <span th:if="${message}" th:text="${message}">알람</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
+                        </div>
+                        <input id="nickname" type="text" class="form-control" th:field="*{nickname}" aria-describedby="nicknameHelp"/>
+                        <small id="newPasswordHelp" class="form-text text-muted">
+                            공백없이 문자와 숫자로만 3자 이상 20자 이하로 입력해주세요. 가입 후 변경 가능합니다.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</small>
+                    </div>
+
+                    <button class="btn btn-outline-primary" type="submit">저장하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="fragments.html :: form-validation"></script>
+</body>
+</html>

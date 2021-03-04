@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+
+<div class="container">
+    <div class="py-5 text-center">
+        <p class="lead">스터디올래</p>
+        <h2>로그인</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div th:if="${errors}" class="alert alert-danger" role="alert">
+            <span th:text="${errors}"></span>
+        </div>
+        <h2>이메일 로그인에 성공하였습니다. 비밀번호 변경을 하시려면 <a href="#" th:href="@{/settings/password}">이곳</a>을 클릭하세요.</h2>
+    </div>
+</div>
+
+<footer>
+
+</footer>
+</body>
+</html>

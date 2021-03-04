@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div th:replace="fragments.html :: study-banner">스터디 배너</div>
+
+
+<div class="container">
+    <div th:replace="fragments.html :: study-info">스터디 정보</div>
+    <div th:replace="fragments.html :: study-menu (studyMenu='members')"></div>
+
+    <div class="row px-3 justify-content-center">
+        <ul class="list-unstyled col-10">
+            <div th:replace="fragments.html :: members (members = ${study.getManagers()}, isManagers = ${true})"></div>
+            <div th:replace="fragments.html :: members (members = ${study.getMembers()}, isManagers=${false})"></div>
+        </ul>
+
+    </div>
+</div>
+
+
+<footer>
+
+</footer>
+</body>
+</html>

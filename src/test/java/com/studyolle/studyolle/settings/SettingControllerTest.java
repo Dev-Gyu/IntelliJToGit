@@ -1,25 +1,32 @@
 package com.studyolle.studyolle.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.studyolle.WithAccount;
 import com.studyolle.studyolle.account.AccountRepository;
 import com.studyolle.studyolle.domain.Account;
+import com.studyolle.studyolle.domain.Tag;
 import com.studyolle.studyolle.service.AccountService;
+import com.studyolle.studyolle.tag.TagRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SettingControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -27,9 +34,91 @@ class SettingControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    AccountService accountService;
+
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
+    }
+
+    @WithAccount("gyus")
+    @DisplayName("계정의 태그 수정 폼")
+    @Test
+    public void 태그수정폼() throws Exception{
+        //given
+        mockMvc.perform(get(SettingController.SETTINGS_TAGS_URL))
+                .andExpect(view().name(SettingController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+
+        //when
+
+
+        //then
+
+    }
+
+    @WithAccount("gyus")
+    @DisplayName("계정에 태그 추가")
+    @Test
+    public void 태그추가폼() throws Exception{
+        //given
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+
+        mockMvc.perform(post(SettingController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Tag newTag = tagRepository.findByTitle("newTag");
+        assertNotNull(newTag);
+        Account gyus = accountRepository.findByNickname("gyus");
+        assertTrue(gyus.getTags().contains(newTag));
+        //when
+
+
+        //then
+
+    }
+
+    @WithAccount("gyus")
+    @DisplayName("태그 삭제 폼")
+    @Test
+    public void 태그삭제폼() throws Exception{
+        //given
+        Account gyus = accountRepository.findByNickname("gyus");
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        accountService.addTag(gyus, newTag);
+
+        assertTrue(gyus.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingController.SETTINGS_TAGS_URL + "/remove")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tagForm))
+                        .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(gyus.getTags().contains(newTag));
+
+        //when
+
+
+        //then
+
     }
 
     @WithAccount("gyus")
