@@ -138,6 +138,7 @@
     })()
 </script>
 
+<!-- 스터디 세팅관련 조각들 -->
 <div th:fragment="study-banner" th:if="${study.useBanner}" class="row" id="study-logo">
     <img th:src="${study.image}"/>
 </div>
@@ -244,5 +245,28 @@
     <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member.profileImage}" width="80" height="80">
     <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span><span th:if="${isManagers}" class="badge badge-primary">관리자</span></h5>
 </li>
+
+
+<div th:fragment="study-settings-menu (currentMenu)" class="list-group">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">소개</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/banner'}">배너 이미지</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">스터디 주제</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">활동 지역</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'study'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">스터디</a>
+</div>
+
+<div th:fragment="summernote-js">
+    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+    <script>
+        $(function(){
+            $('#fullDescription').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+                placeholder: '스터디의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
+                tabsize: 2,
+                height: 300
+            })
+        });
+    </script>
+</div>
 
 </html>

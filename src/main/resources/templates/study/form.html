@@ -49,7 +49,7 @@
             <div class="form-group">
                 <label for="fullDescription">상세 소개</label>
                 <textarea id="fullDescription" th:field="*{fullDescription}" class="form-control"
-                       placeholder="스터디를 자세히 설명해 주세요" aria-describedby="shortDescriptionHelp" required minlength="3" maxlength="20">
+                       placeholder="스터디를 자세히 설명해 주세요" aria-describedby="shortDescriptionHelp" required>
                 </textarea>
                 <small id="fullDescriptionHelp" class="form-text text-muted">
                     스터디의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.
@@ -71,17 +71,7 @@
 </footer>
 
 <script th:replace="fragments.html :: form-validation"></script>
-<script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
-<script>
-    $(function(){
-        $('#fullDescription').summernote({
-            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-            placeholder: '스터디의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
-            tabsize: 2,
-            height: 300
-        })
-    });
-</script>
+<div th:replace="fragments.html :: summernote-js"></div>
 
 
 </body>

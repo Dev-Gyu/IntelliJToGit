@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div th:replace="fragments.html :: study-banner">스터디 배너</div>
+
+
+<div class="container">
+    <div th:replace="fragments.html :: study-info">스터디 정보</div>
+    <div th:replace="fragments.html :: study-menu (studyMenu='settings')"></div>
+
+    <div class="row px-3 justify-content-center">
+        <div class="col-sm-2 mt-1">
+            <div th:replace="fragments.html :: study-settings-menu (currentMenu = 'description')"></div>
+        </div>
+            <form class="needs-validation col-sm-8" th:action="@{'/study/' + ${study.path} + '/settings/description'}" th:object="${studyDescriptionForm}" method="post"
+                   novalidate>
+                <div class="form-group">
+                    <label for="shortDescription" class="form-label">짧은 소개</label>
+                    <input id="shortDescription" type="text" class="form-control" th:field="*{shortDescription}"
+                    aria-describedby="shortDescriptionHelp" required maxlength="100">
+                    <small id="shortDescriptionHelp" class="form-text text-muted">
+                        스터디를 소개하는 간략한 설명을 적어주세요
+                    </small>
+                    <small class="invalid-feedback">최소 한 글자에서 최대 100글자까지 입력해주세요</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors()}" th:error="*{shortDescription}"></small>
+                </div>
+                <div class="form-group">
+                    <label for="fullDescription" class="form-label"></label>
+                    <textarea id="fullDescription" th:field="*{fullDescription}" class="form-control"
+                              placeholder="스터디를 자세히 설명해 주세요" aria-describedby="fullDescriptionHelp" required></textarea>
+                    <small class="invalid-feedback">공백일 수 없습니다.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors()}" th:error="*{fullDescription}"></small>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-primary btn-block">수정</button>
+                </div>
+            </form>
+
+    </div>
+</div>
+
+<footer>
+
+</footer>
+
+<div th:replace="fragments.html :: form-validation"></div>
+<div th:replace="fragments.html :: summernote-js"></div>
+</body>
+</html>
