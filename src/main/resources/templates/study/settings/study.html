@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div class="container">
+    <div th:replace="fragments.html :: study-banner"></div>
+    <div th:replace="fragments.html :: study-info"></div>
+    <div th:replace="fragments.html :: study-menu (studyMenu = 'study')"></div>
+    <div class="row justify-content-center">
+        <div class="col-sm-2">
+            <div th:replace="fragments.html :: study-settings-menu (currentMenu = 'study')"></div>
+        </div>
+        <div class="col-sm-8">
+            <form th:action="@{'/study/' + ${study.path} + '/settings/study/status'}" method="post" novalidate>
+
+                <div class="form-group">
+                    <h2>스터디 공개 및 종료</h2>
+                    <div class="alert alert-info" role="alert"
+                         th:if="${study.isPublished()==false && study.isClosed()==false}">
+                        <span>현재 스터디가 공개되지 않았습니다.</span><br>
+                        <span>스터디 활동을 시작하시려면 스터디를 공개하시기 바랍니다.</span>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert" th:if="${study.isPublished()}">
+                        <span>스터디가 공개되었습니다. 자유롭게 스터디 활동을 진행해주시기 바랍니다.</span><br>
+                        <span>스터디 활동이 종료되었다면, 스터디를 종료해주시기 바랍니다.</span><br>
+                        <span>스터디가 종료되면 더이상 팀원 모집, 모임 생성이 불가능하며 스터디 경로 및 이름 수정이 불가능합니다.</span><br>
+                        <span>스터디에 참여한 팀원, 모임의 기록은 그대로 유지됩니다.</span>
+                    </div>
+
+                    <div class="alert alert-danger" role="alert" th:if="${study.isClosed()}">
+                        <span>스터디가 종료되었습니다.</span><br>
+                        <span>스터디가 종료되면 더이상 팀원 모집, 모임 생성이 불가능하며 스터디 경로 및 이름 수정이 불가능합니다.</span><br>
+                        <span>스터디에 참여한 팀원, 모임의 기록은 그대로 유지됩니다.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-primary"
+                            th:if="${study.isPublished()==false && study.isClosed()==false}">스터디 공개
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger" th:if="${study.isPublished()}">스터디 종료</button>
+                </div>
+
+            </form>
+
+            <form action="#" th:action="@{'/study/' + ${study.path} + '/settings/study/recruiting'}" method="post"
+                  novalidate>
+
+                <div class="form-group" th:if="${study.isPublished() == true && study.isClosed()==false}">
+                    <h2>팀원 모집</h2>
+                    <div class="alert alert-info" role="alert">
+                        <span>팀원을 모집합니다.</span><br>
+                        <span>충분한 스터디 팀원을 모집했다면 모집을 멈출 수 있습니다.</span><br>
+                        <span>팀원 모집 정보는 1시간에 한번 변경 가능합니다.</span>
+                    </div>
+                </div>
+
+                <div class="form-group" th:if="${study.isPublished() == true && study.isClosed()==false}">
+                    <button type="submit" class="btn btn-outline-primary" th:if="${study.isRecruiting()==false}">팀원 모집
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger" th:if="${study.isRecruiting()==true}">팀원 모집 종료
+                    </button>
+                </div>
+            </form>
+            <div class="form-group" th:if="${study.isClosed() == false}">
+                <form th:action="@{'/study/' + ${study.path} + '/settings/study/modifyPath'}"
+                      method="post" class="needs-validation">
+                    <h2>스터디 경로</h2>
+                    <div class="alert alert-warning">
+                        <span>스터디 경로를 수정하면 이전에 사용하던 경로로 스터디에 접근할 수 없으니 주의하세요. </span>
+                    </div>
+                    <input type="text" name="newPath" th:value="${study.path}" class="form-control"
+                           aria-describedby="newPathHelp" required min="2" maxlength="20"/>
+                    <small id="newPathHelp" class="form-text text-muted">
+                        공백없이 문자, 숫자, 대시(-)와 언더바(_)만 3자 이상 20자 이내로 입력하세요. 스터디 홈 주소에 사용합니다. 예)/study/study-path
+                    </small>
+                    <small class="invalid-feedback">올바른 경로를 입력해주세요</small>
+                    <small class="form-text text-danger" th:if="${pathError}" th:value="${pathError}"></small>
+                    <button type="submit" class="btn btn-outline-warning">경로 수정</button>
+                </form>
+            </div>
+            <div class="form-group" th:if="${study.isClosed() == false}">
+                <form th:action="@{'/study/' + ${study.path} + '/settings/study/modifyTitle'}"
+                      method="post" class="needs-validation">
+                    <h2>스터디 이름</h2>
+                    <div class="alert alert-warning">
+                        <span>스터디 이름을 수정합니다. </span>
+                    </div>
+                    <input type="text" name="title" th:value="${study.title}" class="form-control"
+                           aria-describedby="titleHelp" required maxlength="50"/>
+                    <small id="titleHelp" class="form-text text-muted">
+                        공백없이 문자, 숫자, 대시(-)와 언더바(_)만 3자 이상 20자 이내로 입력하세요. 스터디 홈 주소에 사용합니다. 예)/study/study-path
+                    </small>
+                    <small class="invalid-feedback">스터디 이름은 최소 한 글자 이상 입력해주세요</small>
+                    <small class="form-text text-danger" th:if="${titleError}" th:value="${titleError}"></small>
+                    <button type="submit" class="btn btn-outline-warning">이름 수정</button>
+                </form>
+            </div>
+
+            <div class="form-group">
+                <form th:action="@{'/study/' + ${study.path} + '/settings/study/delete'}" method="post">
+                    <h2 class="form-text text-danger">스터디 삭제</h2>
+                    <div class="alert alert-danger" role="alert" th:unless="${study.isPublished()}">
+                        <span>
+                            스터디를 삭제하면 스터디 관련 모든 기록을 삭제하며 복구할 수 없습니다.<br>
+                            다음에 해당하는 스터디는 자동으로 삭제 됩니다.
+                        </span>
+                        <ul>
+                            <li>만든지 1주일이 지난 비공개 스터디</li>
+                            <li>스터디 공개 이후, 한달 동안 모임을 만들지 않은 스터디</li>
+                            <li>스터디 공개 이후, 모임을 만들지 않고 종료한 스터디</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${study.isPublished()}">
+                        <span>
+                            공개중이거나, 모임을 했던 스터디 종료시는 삭제 불가능합니다.<br>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn btn-outline-danger" th:unless="${study.isPublished()}">스터디 삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+
+</footer>
+
+<script th:replace="fragments.html :: form-validation"></script>
+<div th:replace="fragments.html :: summernote-js"></div>
+
+
+</body>
+</html>

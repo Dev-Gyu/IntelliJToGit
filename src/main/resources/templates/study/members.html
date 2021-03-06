@@ -14,9 +14,9 @@
     <div class="row px-3 justify-content-center">
         <ul class="list-unstyled col-10">
             <div th:replace="fragments.html :: members (members = ${study.getManagers()}, isManagers = ${true})"></div>
+            <hr>
             <div th:replace="fragments.html :: members (members = ${study.getMembers()}, isManagers=${false})"></div>
         </ul>
-
     </div>
 </div>
 

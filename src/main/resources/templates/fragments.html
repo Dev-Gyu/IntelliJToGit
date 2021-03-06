@@ -9,7 +9,8 @@
 
         <!-- Bootstrap CSS -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap"
+              rel="stylesheet">
         <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css"/>
         <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css"/>
@@ -22,11 +23,13 @@
             .container {
                 max-width: 100%;
             }
-            .tagify--outside{
+
+            .tagify--outside {
                 border: 0;
                 padding: 0;
                 margin: 0;
             }
+
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             }
@@ -49,7 +52,8 @@
     <a class="navbar-brand" href="/" th:href="@{/}">
         <img src="/images/logo_sm.png" width="30" height="30">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -57,7 +61,8 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <form th:action="@{/new-study}" class="form-inline" method="get">
-                    <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="스터디 개설" aria-label="Search" />
+                    <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="스터디 개설"
+                           aria-label="Search"/>
                 </form>
             </li>
         </ul>
@@ -107,12 +112,18 @@
 </nav>
 
 <div th:fragment="settings-menu (currentMenu)" class="list-group">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">패스워드</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">관심 주제</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">활동 지역</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#"
+       th:href="@{/settings/profile}">프로필</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#"
+       th:href="@{/settings/password}">패스워드</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active"
+       href="#" th:href="@{/settings/notifications}">알림</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#"
+       th:href="@{/settings/tags}">관심 주제</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#"
+       th:href="@{/settings/zones}">활동 지역</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger"
+       th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
 </div>
 
 
@@ -170,21 +181,22 @@
                 </span>
             <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}"
                   class="btn-group" role="group" aria-label="Basic example">
-                    <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
-                        스터디 가입
-                    </a>
+                <form th:action="@{'/study/' + ${study.path} + '/join'}" method="post" class="mx-1">
+                    <button type="submit" class="btn btn-outline-primary">스터디 가입</button>
+                </form>
                     <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
                        th:text="${study.members.size()}">1</a>
                 </span>
             <span sec:authorize="isAuthenticated()"
                   th:if="${!study.closed && study.isMember(#authentication.principal)}" class="btn-group"
                   role="group">
-                    <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/leave'}">
-                        스터디 탈퇴
-                    </a>
+                    <form th:action="@{'/study/' + ${study.path} + '/withdrawal'}" method="post" class="mx-1">
+                        <button type="submit" class="btn btn-outline-danger">스터디 탈퇴</button>
+                    </form>
                     <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
                        th:text="${study.members.size()}">1</a>
                 </span>
+            </span>
             <span sec:authorize="isAuthenticated()"
                   th:if="${study.published && !study.closed && study.isManager(#authentication.principal)}">
                     <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/new-event'}">
@@ -241,25 +253,33 @@
 </div>
 
 <li th:fragment="members (members, isManagers)" class="media mt-3" th:each="member : ${members}">
-    <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="80" height="80"></svg>
+    <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="80"
+         height="80"></svg>
     <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member.profileImage}" width="80" height="80">
-    <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span><span th:if="${isManagers}" class="badge badge-primary">관리자</span></h5>
+    <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span><span th:if="${isManagers}"
+                                                                          class="badge badge-primary">관리자</span></h5>
 </li>
 
 
 <div th:fragment="study-settings-menu (currentMenu)" class="list-group">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">소개</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/banner'}">배너 이미지</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">스터디 주제</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">활동 지역</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'study'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">스터디</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#"
+       th:href="@{'/study/' + ${study.path} + '/settings/description'}">소개</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#"
+       th:href="@{'/study/' + ${study.path} + '/settings/banner'}">배너 이미지</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#"
+       th:href="@{'/study/' + ${study.path} + '/settings/tags'}">스터디 주제</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#"
+       th:href="@{'/study/' + ${study.path} + '/settings/zones'}">활동 지역</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger"
+       th:classappend="${currentMenu == 'study'}? active" href="#"
+       th:href="@{'/study/' + ${study.path} + '/settings/study'}">스터디</a>
 </div>
 
 <div th:fragment="summernote-js">
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
     <script>
-        $(function(){
-            $('#fullDescription').summernote({
+        $(function () {
+            $('.editor').summernote({
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
                 placeholder: '스터디의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
                 tabsize: 2,
@@ -267,6 +287,112 @@
             })
         });
     </script>
+</div>
+
+<div th:fragment="study-form (mode)" class="py-5 text-center">
+    <div class="py-5 text-center">
+        <h2>
+            <a th:href="@{'/study/' + ${study.path}}"><span th:text="${study.title}">스터디</span></a>
+            /<span th:if="${mode == 'form'}">새 모임 만들기</span>
+            <span th:if="${mode == 'update'}" th:text="${eventForm.title}"></span>
+        </h2>
+    </div>
+    <div class="row justify-content-center">
+        <form class="needs-validation col-sm-10" action="#"
+              th:object="${eventForm}" method="post" novalidate>
+            <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}"/>
+            <div class="form-group">
+                <label for="title">모임 이름</label>
+                <input id="title" type="text" th:field="*{title}" class="form-control"
+                       placeholder="모임 이름" aria-describedby="titleHelp" required>
+                <small id="titleHelp" class="form-text text-muted">
+                    모임 이름을 50자 이내로 입력하세요.
+                </small>
+                <small class="invalid-feedback">모임 이름을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}"
+                       th:errors="*{title}">Error</small>
+            </div>
+            <div th:if="${mode == 'form'}" class="form-group">
+                <label for="eventType">모집 방법</label>
+                <select th:field="*{eventType}" class="custom-select mr-sm-2" id="eventType"
+                        aria-describedby="eventTypeHelp">
+                    <option th:value="FCFS">선착순</option>
+                    <option th:value="CONFIRMATIVE">관리자 확인</option>
+                </select>
+                <small id="eventTypeHelp" class="form-text text-muted">
+                    두가지 모집 방법이 있습니다.<br/>
+                    <strong>선착순</strong>으로 모집하는 경우, 모집 인원 이내의 접수는 자동으로 확정되며, 제한 인원을 넘는 신청은 대기 신청이 되며 이후에 확정된 신청 중에 취소가
+                    발생하면 선착순으로 대기 신청자를 확정 신청자도 변경합니다. 단, 등록 마감일 이후에는 취소해도 확정 여부가 바뀌지 않습니다.<br/>
+                    <strong>확인</strong>으로 모집하는 경우, 모임 및 스터디 관리자가 모임 신청 목록을 조회하고 직접 확정 여부를 정할 수 있습니다. 등록 마감일 이후에는 변경할 수
+                    없습니다.
+                </small>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="limitOfEnrollments">모집 인원</label>
+                    <input id="limitOfEnrollments" type="number" th:field="*{limitOfEnrollments}" class="form-control"
+                           placeholder="0"
+                           aria-describedby="limitOfEnrollmentsHelp">
+                    <small id="limitOfEnrollmentsHelp" class="form-text text-muted">
+                        최대 수용 가능한 모임 참석 인원을 설정하세요. 최소 2인 이상 모임이어야 합니다.
+                    </small>
+                    <small class="invalid-feedback">모임 신청 마감 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrollments')}"
+                           th:errors="*{limitOfEnrollments}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="endEnrollmentDateTime">등록 마감 일시</label>
+                    <input id="endEnrollmentDateTime" type="datetime-local" th:field="*{endEnrollmentDateTime}"
+                           class="form-control"
+                           aria-describedby="endEnrollmentDateTimeHelp" required>
+                    <small id="endEnrollmentDateTimeHelp" class="form-text text-muted">
+                        등록 마감 이전에만 스터디 모임 참가 신청을 할 수 있습니다.
+                    </small>
+                    <small class="invalid-feedback">모임 신청 마감 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endEnrollmentDateTime')}"
+                           th:errors="*{endEnrollmentDateTime}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="startDateTime">모임 시작 일시</label>
+                    <input id="startDateTime" type="datetime-local" th:field="*{startDateTime}" class="form-control"
+                           aria-describedby="startDateTimeHelp" required>
+                    <small id="startDateTimeHelp" class="form-text text-muted">
+                        모임 시작 일시를 입력하세요. 상세한 모임 일정은 본문에 적어주세요.
+                    </small>
+                    <small class="invalid-feedback">모임 시작 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}"
+                           th:errors="*{startDateTime}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="startDateTime">모임 종료 일시</label>
+                    <input id="endDateTime" type="datetime-local" th:field="*{endDateTime}" class="form-control"
+                           aria-describedby="endDateTimeHelp" required>
+                    <small id="endDateTimeHelp" class="form-text text-muted">
+                        모임 종료 일시가 지나면 모임은 자동으로 종료 상태로 바뀝니다.
+                    </small>
+                    <small class="invalid-feedback">모임 종료 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endDateTime')}"
+                           th:errors="*{endDateTime}">Error</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">모임 설명</label>
+                <textarea id="description" type="textarea" th:field="*{description}" class="editor form-control"
+                          placeholder="모임을 자세히 설명해 주세요." aria-describedby="descriptionHelp" required></textarea>
+                <small id="descriptionHelp" class="form-text text-muted">
+                    모임에서 다루는 주제, 장소, 진행 방식 등을 자세히 적어 주세요.
+                </small>
+                <small class="invalid-feedback">모임 설명을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}"
+                       th:errors="*{description}">Error</small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="submit"
+                        aria-describedby="submitHelp">모임 수정
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 </html>

@@ -50,14 +50,33 @@ public class StudyController {
 
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model){
+        Study byPath = studyRepository.findByPath(path);
+        if(byPath == null){
+            throw new IllegalArgumentException("존재하지 않는 스터디 입니다.");
+        }
         model.addAttribute(account);
         model.addAttribute(studyRepository.findByPath(path));
         return "/study/view";
     }
     @GetMapping("/study/{path}/members")
     public String viewMember(@CurrentUser Account account, @PathVariable String path, Model model){
+        Study byPath = studyRepository.findByPath(path);
+        if(byPath == null){
+            throw new IllegalArgumentException("존재하지 않는 스터디 입니다.");
+        }
         model.addAttribute(account);
         model.addAttribute(studyRepository.findByPath(path));
         return "/study/members";
+    }
+
+    @PostMapping("/study/{path}/join")
+    public String join(@CurrentUser Account account, @PathVariable String path){
+        studyService.addMember(account, path);
+        return "redirect:/study/" + URLEncoder.encode(path, StandardCharsets.UTF_8);
+    }
+    @PostMapping("/study/{path}/withdrawal")
+    public String withdrawal(@CurrentUser Account account, @PathVariable String path){
+        studyService.withDrawal(account, path);
+        return "redirect:/study/" + URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 }

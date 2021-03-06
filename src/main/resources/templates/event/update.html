@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<nav th:replace="fragments.html :: main-nav"></nav>
+<div th:replace="fragments.html :: study-banner"></div>
+
+<div class="container">
+   <div th:replace="fragments.html :: study-form (mode = 'update')"></div>
+</div>
+
+<script th:replace="fragments.html :: form-validation"></script>
+<script th:replace="fragments.html :: summernote-js"></script>
+</body>
+</html>
