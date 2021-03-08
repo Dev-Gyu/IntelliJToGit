@@ -119,17 +119,21 @@
                             <span th:if="${enroll.accepted}">확정</span>
                             <span th:if="${!enroll.accepted}">대기중</span>
                         </td>
-<!--                        <td th:if="${study.isManager(#authentication.principal)}">-->
-<!--                            <a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"-->
-<!--                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>-->
-<!--                            <a th:if="${event.canReject(enroll)}" href="#" class="text-decoration-none"-->
-<!--                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>-->
-<!--                        </td>-->
                         <td th:if="${study.isManager(#authentication.principal)}">
-                            <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
-                            <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
+                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}" th:if="${!enroll.accepted && !enroll.attended}" method="post">
+                                <button type="submit" class="btn btn-outline-primary" th:if="${event.canAccept(enroll) &&!enroll.accepted && !enroll.attended}">참가 수락</button>
+                            </form>
+                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}" th:if="${enroll.accepted && !enroll.attended}" method="post">
+                                <button type="submit" class="btn btn-outline-primary" th:if="${event.canReject(enroll) &&enroll.accepted && !enroll.attended}">참가 취소</button>
+                            </form>
+                        </td>
+                        <td th:if="${study.isManager(#authentication.principal)}">
+                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}" th:if="${enroll.accepted && !enroll.attended}" method="post">
+                                <button type="submit" class="btn btn-outline-primary" th:if="${enroll.accepted && !enroll.attended}">체크인</button>
+                            </form>
+                            <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/cancelCheckin'}" th:if="${enroll.accepted && enroll.attended}" method="post">
+                                <button type="submit" class="btn btn-outline-primary" th:if="${enroll.accepted && enroll.attended}">체크인 취소</button>
+                            </form>
                         </td>
                     </tr>
                     </tbody>
@@ -139,8 +143,8 @@
         <dl class="col-3 pt-3 text-right">
             <dt class="font-weight-light">모집 방법</dt>
             <dd>
-                <span th:if="${event.eventType == T(com.studyolle.studyolle.event.EventType).FCFS}">선착순</span>
-                <span th:if="${event.eventType == T(com.studyolle.studyolle.event.EventType).CONFIRMATIVE}">관리자 확인</span>
+                <span th:if="${event.eventType == T(com.studyolle.studyolle.modules.event.EventType).FCFS}">선착순</span>
+                <span th:if="${event.eventType == T(com.studyolle.studyolle.modules.event.EventType).CONFIRMATIVE}">관리자 확인</span>
             </dd>
 
             <dt class="font-weight-light">모집 인원</dt>
